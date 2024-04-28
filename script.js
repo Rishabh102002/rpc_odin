@@ -37,42 +37,73 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
-function caseFix(input){
-    let str = input.toLowerCase();
-    str = str.charAt(0).toUpperCase() + str.slice(1);
-    return str;
+function showPlayerChoice(palyerChoice) {
+    const div = document.querySelector("#result");
+    const para = document.createElement("p");
+  console.log(palyerChoice)
+    switch(palyerChoice){
+        case "Rock":
+            para.textContent = "You choose Rock: ✊";
+            break;
+        case "Paper":
+            para.textContent = "You choose Paper: 🤚";
+            break;
+        case "Scissors":
+            para.textContent = "You choose Scissors: ✌️";
+            break;
+    }
+
+    div.insertBefore(para, div.firstChild) 
 }
 
-function playGame(){
-    let playerPoints = 0;
-    let computerPoints = 0;
-    for(let i =1; i<=5; i++){
-        let input = prompt("Please enter your choice for "+ i +" round :")
-        let ps = caseFix(input);
-        let cs = getComputerChoice();
-        let result = playRound(ps,cs);
-        console.log("ROUND",i);
-        console.log("You choose: ",ps,"   |   ","The computer choose: ",cs);
-        console.log(result);
-        let x = result.slice(4,7);
-        if( x === "Win" ){
-            playerPoints+=1
-        }
-        else if(x === "Los"){
-            computerPoints+=1
-        }
+function showComputerChoice(computerChoice){
+    const div = document.querySelector("#result");
+    const para = document.createElement("p");
+    switch(computerChoice){
+        case "Rock":
+            para.textContent = "The computer has chosen Rock: ✊";
+            break;
+        case "Paper":
+            para.textContent = "The computer has chosen Paper: 🤚";
+            break;
+        case "Scissors":
+            para.textContent = "The computer has chosen Scissors: ✌️";
+            break;
     }
-    if(playerPoints == computerPoints){
-        console.log("Its a Draw The player and computer both scored: ",playerPoints);
+    div.insertBefore(para, div.firstChild)
+}
+
+function showResult(palyerChoice,computerChoice){
+    const div = document.querySelector("#result");
+    const result = document.createElement("p");
+    result.textContent = playRound(palyerChoice,computerChoice);
+    if(result.textContent.slice(0,7) === "You Win"){
+        result.style.cssText ="color: white; background: #6ccc4b ; padding: 8px;";
     }
-    else if(playerPoints> computerPoints){
-        console.log("PLAYER WON THE GAME! with ",playerPoints," points.");
-        console.log("While the computer scored ",computerPoints, "points.");
+    else if (result.textContent.slice(0,7) === "You Los"){
+        result.style.cssText ="color: white; background: #db2c32 ; padding: 8px;";
     }
     else{
-        console.log("PLAYER LOST THE GAME! with",playerPoints," points.");
-        console.log("While the computer scored ",computerPoints, "points.");
+        result.style.cssText ="color: white; background: #e0c358 ; padding: 8px;";
     }
+
+    div.insertBefore(result, div.firstChild)
+
+    const lineBreak = document.createElement("hr")
+    div.insertBefore(lineBreak, div.firstChild)
 }
 
-playGame();
+
+function playGame(palyerChoice){
+    const computerChoice = getComputerChoice();
+    showPlayerChoice(palyerChoice);
+    showComputerChoice(computerChoice);
+    showResult(palyerChoice,computerChoice);
+}
+
+
+const buttons = document.querySelectorAll("button");
+buttons.forEach( (button) => {
+    button.addEventListener("click", () => playGame(button.value));
+    
+});
